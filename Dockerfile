@@ -3,14 +3,14 @@ FROM ubuntu
 
 # Install packages
 RUN apt-get -y update
-RUN apt-get -y install curl nano git openssh-server iproute2  
+RUN apt-get -y install curl nano git openssh-server iproute2 jq figlet
 
 # Zerotier
 ARG ZEROTIER_API_KEY
 ENV ZEROTIER_API_KEY=$ZEROTIER_API_KEY
 ARG ZEROTIER_NETWORK_ID
 ENV ZEROTIER_NETWORK_ID=$ZEROTIER_NETWORK_ID
-RUN echo "api key:$ZEROTIER_API_KEY network id:$ZEROTIER_NETWORK_ID" > /root/zerotier.txt
+RUN echo "api key:$ZEROTIER_API_KEY" > /root/zerotier.txt
 
 # Configure SSH server
 RUN echo 'root:root' | chpasswd
@@ -24,6 +24,9 @@ EXPOSE 22/tcp
 COPY scripts/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+
+# startup script
+COPY scripts/bannerbrawl_welcome.sh /etc/profile.d/bannerbrawl_welcome.sh
 
 # Start shell
 CMD /bin/bash
