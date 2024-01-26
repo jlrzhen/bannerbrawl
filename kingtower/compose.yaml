@@ -1,8 +1,6 @@
 services:
   kingtower:
-    build:
-      context: ..
-      dockerfile: ./kingtower/Dockerfile
+    image: bannerbrawl-kingtower:v1.0
     ports:
       - "22:22"
     stdin_open: true # docker run -i
@@ -12,4 +10,3 @@ services:
       - SYS_ADMIN
     devices:
       - /dev/net/tun
-    network_mode: host

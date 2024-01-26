@@ -3,9 +3,7 @@ FROM ubuntu
 
 # Install packages
 RUN apt-get -y update
-RUN apt-get -y install curl git nano
-RUN apt-get -y install python3 python3.10-venv python3-pip
-RUN apt-get -y install openssh-server iproute2 
+RUN apt-get -y install curl nano git openssh-server iproute2  
 
 # Zerotier
 ARG ZEROTIER_API_KEY
@@ -13,7 +11,6 @@ ENV ZEROTIER_API_KEY=$ZEROTIER_API_KEY
 ARG ZEROTIER_NETWORK_ID
 ENV ZEROTIER_NETWORK_ID=$ZEROTIER_NETWORK_ID
 RUN echo "api key:$ZEROTIER_API_KEY network id:$ZEROTIER_NETWORK_ID" > /root/zerotier.txt
-RUN curl -s https://install.zerotier.com | bash
 
 # Configure SSH server
 RUN echo 'root:root' | chpasswd
