@@ -1,0 +1,14 @@
+services:
+  kingtower:
+    build:
+      context: ..
+      dockerfile: ./kingtower/Dockerfile
+    ports:
+      - "22:22"
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    cap_add:
+      - NET_ADMIN # for zerotier
+      - SYS_ADMIN
+    devices:  
+      - ":/dev/net/tun"
