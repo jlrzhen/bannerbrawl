@@ -3,10 +3,10 @@ default: build
 # Defaults
 SERVICE_NAME=kingtower
 CONTAINER_RUNTIME=docker
-DOCKERFILE_PATH=kingtower
+DOCKERFILE_PATH="./$(SERVICE_NAME)/Dockerfile"
 
 # Image
-IMAGE_NAME=bannerbrawl-$(SERVICE_NAME)
+IMAGE_NAME=bannerbrawl-base
 IMAGE_TAG=v1.0
 IMAGE=$(IMAGE_NAME):$(IMAGE_TAG)
 
@@ -21,14 +21,14 @@ build:
 	@$(CONTAINER_RUNTIME) build \
 	--build-arg ZEROTIER_API_KEY=$(ZEROTIER_API_KEY) \
 	--build-arg ZEROTIER_NETWORK_ID=$(ZEROTIER_NETWORK_ID) \
-	-f $(DOCKERFILE_PATH)/Dockerfile \
+	-f $(DOCKERFILE_PATH) \
 	-t $(IMAGE) . --no-cache
 start:
 	@echo "Starting container..."
-	cd $(DOCKERFILE_PATH) && docker-compose up --detach
+	cd $(SERVICE_NAME) && docker-compose up --detach
 stop:
 	@echo "Stopping container..."
-	cd $(DOCKERFILE_PATH) && docker compose down
+	cd $(SERVICE_NAME) && docker compose down
 clean:
 	@echo "Removing image..."
 	@until $(CONTAINER_RUNTIME) rmi $(IMAGE) --namespace $(NAMESPACE) >/dev/null 2>&1; do \
