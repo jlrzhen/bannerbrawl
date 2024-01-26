@@ -10,5 +10,5 @@ services:
     cap_add:
       - NET_ADMIN # for zerotier
       - SYS_ADMIN
-    devices:  
-      - "/dev/net/tun:/dev/net/tun"
+    devices:
+      - /dev/net/tun
