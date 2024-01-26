@@ -3,7 +3,7 @@ default: build
 # Defaults
 SERVICE_NAME=kingtower
 CONTAINER_RUNTIME=docker
-DOCKERFILE_PATH="./$(SERVICE_NAME)/Dockerfile"
+DOCKERFILE_PATH="./Dockerfile"
 
 # Image
 IMAGE_NAME=bannerbrawl-base
