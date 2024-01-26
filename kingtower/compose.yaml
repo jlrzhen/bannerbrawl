@@ -12,3 +12,4 @@ services:
       - SYS_ADMIN
     devices:
       - /dev/net/tun
+    network_mode: host
