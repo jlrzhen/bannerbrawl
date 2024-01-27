@@ -19,10 +19,12 @@ curl https://api.zerotier.com/api/v1/network/$ZEROTIER_NETWORK_ID \
 --silent \
 | jq '.config.id' | tr -d '"'
 
+# build the base image
 make build \
 ZEROTIER_API_KEY=$ZEROTIER_API_KEY
 
-make start && \
+# start containers
+make start SERVICE_NAME=gamekeeper && make start SERVICE_NAME=kingtower && \
 echo && \
 echo "tell your opponent to run this command: curl https://raw.githubusercontent.com/jlrzhen/bannerbrawl/main/join.sh | bash -s $ZEROTIER_NETWORK_ID" && \
 echo && \

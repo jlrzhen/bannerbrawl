@@ -15,3 +15,7 @@ curl https://api.zerotier.com/api/v1/network/$ZEROTIER_NETWORK_ID \
 -X DELETE \
 -H "Authorization: token $ZEROTIER_API_KEY" \
 --silent \
+
+# stop containers
+make stop SERVICE_NAME=kingtower
+make stop SERVICE_NAME=gamekeeper

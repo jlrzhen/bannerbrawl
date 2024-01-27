@@ -21,6 +21,7 @@ build:
 	@$(CONTAINER_RUNTIME) build \
 	--build-arg ZEROTIER_API_KEY=$(ZEROTIER_API_KEY) \
 	--build-arg ZEROTIER_NETWORK_ID=$(ZEROTIER_NETWORK_ID) \
+	--build-arg GAMEKEEPER_MEMBER_ID=$(GAMEKEEPER_MEMBER_ID) \
 	-f $(DOCKERFILE_PATH) \
 	-t $(IMAGE) . --no-cache
 start:
