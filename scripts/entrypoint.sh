@@ -32,6 +32,7 @@ $ZEROTIER_ENDPOINT/network/$ZEROTIER_NETWORK_ID/member/$ZEROTIER_MEMBER_ID \
 | jq '.config.id' | tr -d '"'
 
 # create list of members
+until zerotier-cli listnetworks | grep "OK PRIVATE"; do sleep 1; done
 curl \
 $ZEROTIER_ENDPOINT/network/$ZEROTIER_NETWORK_ID/member \
 -X GET \
