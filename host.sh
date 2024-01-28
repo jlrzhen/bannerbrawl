@@ -1,7 +1,7 @@
 read -s -p "Enter Zerotier API key: " ZEROTIER_API_KEY; echo
 
 # create the game network
-export ZEROTIER_NETWORK_ID=$(
+ZEROTIER_NETWORK_ID=$(
     curl https://api.zerotier.com/api/v1/network \
     -X POST \
     -H "Authorization: token $ZEROTIER_API_KEY" \
