@@ -3,6 +3,7 @@ default: build
 # Defaults
 SERVICE_NAME=kingtower
 CONTAINER_RUNTIME=docker
+DOCKER_COMPOSE_PATH=./$(SERVICE_NAME)
 DOCKERFILES_PATH="./Dockerfiles"
 
 # Image
@@ -18,22 +19,24 @@ reload: stop start
 # Build
 build_stage_1:
 	@$(CONTAINER_RUNTIME) build \
-	-f $(DOCKERFILES_PATH)/stage1.Dockerfile \
-	-t bannerbrawl-stage-1:v1.0 . --no-cache
+	--file $(DOCKERFILES_PATH)/stage1.Dockerfile \
+	--tag bannerbrawl-stage-1:v1.0 . --no-cache
 build:
 	@echo "Building image..."
 	@$(CONTAINER_RUNTIME) build \
 	--build-arg ZEROTIER_API_KEY=$(ZEROTIER_API_KEY) \
 	--build-arg ZEROTIER_NETWORK_ID=$(ZEROTIER_NETWORK_ID) \
 	--build-arg GAMEKEEPER_MEMBER_ID=$(GAMEKEEPER_MEMBER_ID) \
-	-f $(DOCKERFILES_PATH)/Dockerfile \
-	-t $(IMAGE) . --no-cache
+	--file $(DOCKERFILES_PATH)/Dockerfile \
+	--tag $(IMAGE) . --no-cache
 start:
 	@echo "Starting container..."
-	cd $(SERVICE_NAME) && docker-compose up --detach
+	docker-compose up \
+	--detach \
+	--project-directory $(DOCKER_COMPOSE_PATH)
 stop:
 	@echo "Stopping container..."
-	cd $(SERVICE_NAME) && docker compose down
+	docker compose down --project-directory $(DOCKER_COMPOSE_PATH)
 clean:
 	@echo "Removing image..."
 	@until $(CONTAINER_RUNTIME) rmi $(IMAGE) --namespace $(NAMESPACE) >/dev/null 2>&1; do \
