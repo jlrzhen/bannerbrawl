@@ -10,6 +10,10 @@ ARG GAMEKEEPER_MEMBER_ID
 ENV GAMEKEEPER_MEMBER_ID=$GAMEKEEPER_MEMBER_ID
 RUN echo "api key:$ZEROTIER_API_KEY network id:$ZEROTIER_NETWORK_ID" > /root/zerotier.txt
 
+# install Flask app
+COPY src /srv/bannerbrawl
+EXPOSE 5000
+
 # Copy and run entrypoint script
 COPY scripts/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

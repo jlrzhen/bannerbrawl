@@ -3,7 +3,7 @@ default: build
 # Defaults
 SERVICE_NAME=kingtower
 CONTAINER_RUNTIME=docker
-DOCKER_COMPOSE_PATH=./$(SERVICE_NAME)
+DOCKER_COMPOSE_PATH=./$(SERVICE_NAME)/compose.yaml
 DOCKERFILES_PATH="./Dockerfiles"
 
 # Image
@@ -31,15 +31,14 @@ build:
 	--tag $(IMAGE) . --no-cache
 start:
 	@echo "Starting container..."
-	docker-compose up \
-	--detach \
-	--project-directory $(DOCKER_COMPOSE_PATH)
+	@docker-compose --file $(DOCKER_COMPOSE_PATH) up --detach
 stop:
 	@echo "Stopping container..."
-	docker compose down --project-directory $(DOCKER_COMPOSE_PATH)
+	docker  compose --file $(DOCKER_COMPOSE_PATH) down 
 clean:
 	@echo "Removing image..."
-	@until $(CONTAINER_RUNTIME) rmi $(IMAGE) --namespace $(NAMESPACE) >/dev/null 2>&1; do \
+	@until $(CONTAINER_RUNTIME) rmi $(IMAGE) \
+	--namespace $(NAMESPACE) >/dev/null 2>&1; do \
 		echo "Retrying in 10 seconds..."; \
 		sleep 10; \
 	done

@@ -40,5 +40,8 @@ $ZEROTIER_ENDPOINT/network/$ZEROTIER_NETWORK_ID/member \
 --silent \
 > /root/members.json
 
+# start gunicorn
+gunicorn --bind 0.0.0.0:5000 /srv/bannerbrawl/kingtower:app --daemon
+
 # Execute the CMD
 exec "$@"

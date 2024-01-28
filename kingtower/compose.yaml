@@ -3,6 +3,7 @@ services:
     image: bannerbrawl-base:v1.0
     ports:
       - "22:22"
+      - "5000:5000"
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     cap_add:

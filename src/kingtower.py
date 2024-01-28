@@ -3,6 +3,7 @@
 import subprocess
 from flask import Flask, jsonify
 
+# gunicorn --bind 0.0.0.0:5000 ./kingtower:app --daemon
 app = Flask(__name__)
 
 @app.route("/")
