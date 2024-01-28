@@ -3,7 +3,7 @@ default: build
 # Defaults
 SERVICE_NAME=kingtower
 CONTAINER_RUNTIME=docker
-DOCKERFILE_PATH="./Dockerfile"
+DOCKERFILES_PATH="./Dockerfiles"
 
 # Image
 IMAGE_NAME=bannerbrawl-base
@@ -16,13 +16,17 @@ help:
 reload: stop start
 
 # Build
+build_stage_1:
+	@$(CONTAINER_RUNTIME) build \
+	-f $(DOCKERFILES_PATH)/stage1.Dockerfile \
+	-t bannerbrawl-stage-1:v1.0 . --no-cache
 build:
 	@echo "Building image..."
 	@$(CONTAINER_RUNTIME) build \
 	--build-arg ZEROTIER_API_KEY=$(ZEROTIER_API_KEY) \
 	--build-arg ZEROTIER_NETWORK_ID=$(ZEROTIER_NETWORK_ID) \
 	--build-arg GAMEKEEPER_MEMBER_ID=$(GAMEKEEPER_MEMBER_ID) \
-	-f $(DOCKERFILE_PATH) \
+	-f $(DOCKERFILES_PATH)/Dockerfile \
 	-t $(IMAGE) . --no-cache
 start:
 	@echo "Starting container..."
