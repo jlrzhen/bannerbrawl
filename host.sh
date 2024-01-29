@@ -24,8 +24,9 @@ make build \
 ZEROTIER_API_KEY=$ZEROTIER_API_KEY
 
 # start containers
-make start SERVICE_NAME=gamekeeper && make start SERVICE_NAME=kingtower && \
-echo && \
-echo "tell your opponent to run this command: curl https://raw.githubusercontent.com/jlrzhen/bannerbrawl/main/join.sh | bash -s $ZEROTIER_NETWORK_ID" && \
-echo && \
-echo "to login to kingtower, run: ssh root@localhost"
+echo "Tell your opponent to run this command:\ncurl https://raw.githubusercontent.com/jlrzhen/bannerbrawl/main/join.sh | bash -s $ZEROTIER_NETWORK_ID"
+read -p "Then ask your opponent to give you their member ids and paste them here: " member_ids
+echo $member_ids
+#make start SERVICE_NAME=gamekeeper && make start SERVICE_NAME=kingtower
+#echo
+#echo "to login to kingtower, run: ssh root@localhost"

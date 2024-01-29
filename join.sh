@@ -18,18 +18,18 @@ spinner() {
 spin_list=("⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏")
 for port in "${PORTS[@]}"
 do
-    echo -ne '\033[?25l'   # Hide cursor
+    echo -ne '\033[?25l' # Hide cursor
     
     # wait for gunicorn start
     until [[ ! -z $(curl -s localhost:$port) ]]
     do spinner; done
-    echo -ne "\x1b[2K\r"
+    echo -ne "\x1b[2K\r" # clear line
 
     # get member ids
     until [[ ! -z $(curl -s localhost:$port | jq '.member_id' | tr -d '"') ]]
     do spinner; done
     
-    echo -ne '\033[?25h'   # Show cursor
+    echo -ne '\033[?25h' # Show cursor
 
     MEMBER_ID=$(curl -s localhost:$port | jq '.member_id' | tr -d '"')
     MEMBER_IDS+=($MEMBER_ID)
