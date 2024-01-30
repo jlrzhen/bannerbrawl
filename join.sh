@@ -37,3 +37,12 @@ done
 
 echo "login to kingtower by running: ssh root@localhost"
 echo "Member ids: ${MEMBER_IDS[@]}"
+
+# Join the array into a space-separated string
+member_ids_str=$(IFS=" " ; echo "${MEMBER_IDS[*]}")
+
+# Encode the string in Base64
+base64_encoded=$(echo -n "$member_ids_str" | base64)
+
+# Print the command for the user to copy
+echo "code: $base64_encoded"
