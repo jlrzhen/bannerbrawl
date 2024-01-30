@@ -8,7 +8,7 @@ IFS=" " read -ra join_params <<< "$base64_decoded"
 echo "join params: ${join_params[@]}"
 
 # create the game network
-make build ZEROTIER_NETWORK_ID="${join_params[0]}" GAMEKEEPER_MEMBER_ID="${join_params[1]}"
+make build ZEROTIER_NETWORK_ID="${join_params[0]}" GAMEKEEPER_IP="${join_params[1]}"
 
 make start SERVICE_NAME=gamekeeper
 make start SERVICE_NAME=kingtower

@@ -26,7 +26,7 @@ build:
 	@$(CONTAINER_RUNTIME) build \
 	--build-arg ZEROTIER_API_KEY=$(ZEROTIER_API_KEY) \
 	--build-arg ZEROTIER_NETWORK_ID=$(ZEROTIER_NETWORK_ID) \
-	--build-arg GAMEKEEPER_MEMBER_ID=$(GAMEKEEPER_MEMBER_ID) \
+	--build-arg GAMEKEEPER_IP=$(GAMEKEEPER_IP) \
 	--file $(DOCKERFILES_PATH)/Dockerfile \
 	--tag $(IMAGE) . --no-cache
 start:

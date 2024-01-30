@@ -66,17 +66,17 @@ gamekeeper_ip=$(
 )
 echo "gamekeeper ip: $gamekeeper_ip"
 
-#join_params=("$ZEROTIER_NETWORK_ID" "$gamekeeper_ip")
+join_params=("$ZEROTIER_NETWORK_ID" "$gamekeeper_ip")
 
 # Join the array into a space-separated string
-#join_params_str=$(IFS=" " ; echo "${JOIN_PARAMS[*]}")
+join_params_str=$(IFS=" " ; echo "${join_params[*]}")
 
 # Encode the string in Base64
-#join_params_base64_encoded=$(echo -n "$join_params_str" | base64)
+join_params_base64_encoded=$(echo -n "$join_params_str" | base64)
 
 echo
 echo "Tell your opponent to run this command:"
-echo "curl https://raw.githubusercontent.com/jlrzhen/bannerbrawl/main/join.sh | bash -s $ZEROTIER_NETWORK_ID $gamekeeper_ip"
+echo "curl https://raw.githubusercontent.com/jlrzhen/bannerbrawl/main/join.sh | bash -s $join_params_base64_encoded"
 read -p "Then ask your opponent to give you their response code and paste it here: " member_ids
 
 # Decode the Base64-encoded string
