@@ -1,3 +1,5 @@
+source scripts/spinners.sh
+
 # create the game network
 make build ZEROTIER_NETWORK_ID=$1 GAMEKEEPER_MEMBER_ID=$2
 
@@ -5,17 +7,9 @@ make start SERVICE_NAME=gamekeeper
 make start SERVICE_NAME=kingtower
 echo
 
+# get member ids from flask
 PORTS=("5000" "5001")
 MEMBER_IDS=()
-
-spinner() {
-    for spin in "${spin_list[@]}"; do
-        echo -ne "$spin Waiting for containers to respond...\r"
-        sleep 0.05
-    done
-}
-
-spin_list=("⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏")
 for port in "${PORTS[@]}"
 do
     echo -ne '\033[?25l' # Hide cursor
@@ -35,8 +29,9 @@ do
     MEMBER_IDS+=($MEMBER_ID)
 done
 
-echo "login to kingtower by running: ssh root@localhost"
 echo "Member ids: ${MEMBER_IDS[@]}"
+echo "Login to kingtower by running: ssh root@localhost"
+echo
 
 # Join the array into a space-separated string
 member_ids_str=$(IFS=" " ; echo "${MEMBER_IDS[*]}")
@@ -45,4 +40,4 @@ member_ids_str=$(IFS=" " ; echo "${MEMBER_IDS[*]}")
 base64_encoded=$(echo -n "$member_ids_str" | base64)
 
 # Print the command for the user to copy
-echo "code: $base64_encoded"
+echo "Your response code: $base64_encoded"

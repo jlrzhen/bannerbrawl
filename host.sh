@@ -1,8 +1,11 @@
+source scripts/spinners.sh
+
 read -s -p "Enter Zerotier API key: " ZEROTIER_API_KEY; echo
+ZEROTIER_ENDPOINT="https://api.zerotier.com/api/v1"
 
 # create the game network
 ZEROTIER_NETWORK_ID=$(
-    curl https://api.zerotier.com/api/v1/network \
+    curl $ZEROTIER_ENDPOINT/network \
     -X POST \
     -H "Authorization: token $ZEROTIER_API_KEY" \
     -d "{}" \
@@ -12,7 +15,8 @@ ZEROTIER_NETWORK_ID=$(
 echo "created network $ZEROTIER_NETWORK_ID"
 
 # configure the network
-curl https://api.zerotier.com/api/v1/network/$ZEROTIER_NETWORK_ID \
+printf "configured network "
+curl $ZEROTIER_ENDPOINT/network/$ZEROTIER_NETWORK_ID \
 -X POST \
 -H "Authorization: token $ZEROTIER_API_KEY" \
 -d '{"config":{"name":"bannerbrawl","private":true,"routes":[{"target":"10.0.0.0/24"}],"ipAssignmentPools":[{"ipRangeStart":"10.0.0.1","ipRangeEnd":"10.0.0.255"}]}}' \
@@ -24,8 +28,35 @@ make build \
 ZEROTIER_API_KEY=$ZEROTIER_API_KEY
 
 # start containers
-echo "Tell your opponent to run this command:\ncurl https://raw.githubusercontent.com/jlrzhen/bannerbrawl/main/join.sh | bash -s $ZEROTIER_NETWORK_ID"
-read -p "Then ask your opponent to give you their member ids and paste them here: " member_ids
+make start SERVICE_NAME=gamekeeper && \
+make start SERVICE_NAME=kingtower
+
+# get member ids and gamekeeper ip from flask
+PORTS=("5000" "5001")
+ACTIVE_MEMBER_IDS=()
+for port in "${PORTS[@]}"
+do
+    echo -ne '\033[?25l' # Hide cursor
+    
+    # wait for gunicorn start
+    until [[ ! -z $(curl -s localhost:$port) ]]
+    do spinner; done
+    echo -ne "\x1b[2K\r" # clear line
+
+    # get member ids
+    until [[ ! -z $(curl -s localhost:$port | jq '.member_id' | tr -d '"') ]]
+    do spinner; done
+    
+    echo -ne '\033[?25h' # Show cursor
+
+    ACTIVE_MEMBER_ID=$(curl -s localhost:$port | jq '.member_id' | tr -d '"')
+    ACTIVE_MEMBER_IDS+=($ACTIVE_MEMBER_ID)
+done
+echo "Member ids: ${ACTIVE_MEMBER_IDS[@]}"
+echo
+echo "Tell your opponent to run this command:"
+echo "curl https://raw.githubusercontent.com/jlrzhen/bannerbrawl/main/join.sh | bash -s $ZEROTIER_NETWORK_ID"
+read -p "Then ask your opponent to give you their response code and paste it here: " member_ids
 
 # Decode the Base64-encoded string
 base64_decoded=$(echo "$member_ids" | base64 -d)
@@ -33,13 +64,36 @@ base64_decoded=$(echo "$member_ids" | base64 -d)
 # Split the string into an array using space as the delimiter
 IFS=" " read -ra member_ids <<< "$base64_decoded"
 
-# Process the strings as needed
-for member_id in "${member_ids[@]}"; do
-    echo "Member id: $member_id"
-    # Add your processing logic here
+echo "Member ids: ${member_ids[@]}"
+
+for member_id in "${member_ids[@]}"
+do network_member=''
+    # wait for guest containers to join
+    until [[ ! -z "${network_member}" ]]
+    do network_member=$(
+            curl \
+            $ZEROTIER_ENDPOINT/network/$ZEROTIER_NETWORK_ID/member \
+            -X GET \
+            -H "Authorization: token $ZEROTIER_API_KEY" \
+            --silent \
+            | jq --arg member_id "$member_id" \
+            '.[] | select(.config.id == $member_id).config.id' \
+            | tr -d '"'
+        )
+        echo "waiting for $member_id to join..."
+        sleep 1
+    done
+    
+    # approve guest containers
+    curl \
+    $ZEROTIER_ENDPOINT/network/$ZEROTIER_NETWORK_ID/member/$member_id \
+    -X POST \
+    -H "Authorization: token $ZEROTIER_API_KEY" \
+    -d '{"config":{"authorized":true}}' \
+    --silent \
+    | jq '.config.id' | tr -d '"' 1>/dev/null
+    echo "Approved member id: $member_id"
 done
 
-echo $member_ids
-#make start SERVICE_NAME=gamekeeper && make start SERVICE_NAME=kingtower
-#echo
-#echo "to login to kingtower, run: ssh root@localhost"
+echo "Login to kingtower by running: ssh root@localhost"
+echo
