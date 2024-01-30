@@ -53,6 +53,19 @@ do
     ACTIVE_MEMBER_IDS+=($ACTIVE_MEMBER_ID)
 done
 echo "Member ids: ${ACTIVE_MEMBER_IDS[@]}"
+
+gamekeeper_ip=$(
+    curl \
+    $ZEROTIER_ENDPOINT/network/$ZEROTIER_NETWORK_ID/member \
+    -X GET \
+    -H "Authorization: token $ZEROTIER_API_KEY" \
+    --silent \
+    | jq --arg member_id "${ACTIVE_MEMBER_IDS[0]}" \
+    '.[] | select(.config.id == $member_id).config.ipAssignments[0]' \
+    | tr -d '"'
+)
+echo "gamekeeper ip: $gamekeeper_ip"
+
 echo
 echo "Tell your opponent to run this command:"
 echo "curl https://raw.githubusercontent.com/jlrzhen/bannerbrawl/main/join.sh | bash -s $ZEROTIER_NETWORK_ID"
