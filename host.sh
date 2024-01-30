@@ -64,6 +64,7 @@ gamekeeper_ip=$(
     '.[] | select(.config.id == $member_id).config.ipAssignments[0]' \
     | tr -d '"'
 )
+echo
 echo "gamekeeper ip: $gamekeeper_ip"
 
 join_params=("$ZEROTIER_NETWORK_ID" "$gamekeeper_ip")
@@ -76,7 +77,9 @@ join_params_base64_encoded=$(echo -n "$join_params_str" | base64)
 
 echo
 echo "Tell your opponent to run this command:"
-echo "curl https://raw.githubusercontent.com/jlrzhen/bannerbrawl/main/join.sh | bash -s $join_params_base64_encoded"
+echo
+echo "curl -s https://raw.githubusercontent.com/jlrzhen/bannerbrawl/main/join.sh | bash -s $join_params_base64_encoded"
+echo
 read -p "Then ask your opponent to give you their response code and paste it here: " member_ids
 
 # Decode the Base64-encoded string
