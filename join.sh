@@ -1,7 +1,14 @@
 source scripts/spinners.sh
 
+# Decode the Base64-encoded string
+base64_decoded=$(echo "$1" | base64 -d)
+
+# Split the string into an array using space as the delimiter
+IFS=" " read -ra join_params <<< "$base64_decoded"
+echo "join params: ${join_params[@]}"
+
 # create the game network
-make build ZEROTIER_NETWORK_ID=$1 GAMEKEEPER_MEMBER_ID=$2
+make build ZEROTIER_NETWORK_ID="${join_params[0]}" GAMEKEEPER_MEMBER_ID="${join_params[1]}"
 
 make start SERVICE_NAME=gamekeeper
 make start SERVICE_NAME=kingtower
