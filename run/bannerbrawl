@@ -1,0 +1,13 @@
+BANNERBRAWL_PATH="/bannerbrawl"
+
+if [ $1 = "host" ]
+    then $BANNERBRAWL_PATH/host.sh 
+fi
+
+if [ $1 = "join" ]
+    then $BANNERBRAWL_PATH/join.sh $2
+fi
+
+if [ $1 = "uninstall" ]
+    then $BANNERBRAWL_PATH/install.sh
+fi
