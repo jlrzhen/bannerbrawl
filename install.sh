@@ -22,7 +22,7 @@ else
     sudo usermod -aG docker $USER
     newgrp docker
 fi
-sudo apt install jq make
+sudo apt install jq make git
 
 if ls /bannerbrawl > /dev/null
 then
