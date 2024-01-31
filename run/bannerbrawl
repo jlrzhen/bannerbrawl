@@ -1,13 +1,21 @@
 BANNERBRAWL_PATH="/bannerbrawl"
 
-if [ $1 = "host" ]
-    then $BANNERBRAWL_PATH/host.sh 
+if [ $1 == "host" ]
+    then cd $BANNERBRAWL_PATH && ./host.sh 
 fi
 
-if [ $1 = "join" ]
-    then $BANNERBRAWL_PATH/join.sh $2
+if [ $1 == "delete_network" ]
+    then cd $BANNERBRAWL_PATH && ./delete_network.sh
 fi
 
-if [ $1 = "uninstall" ]
-    then $BANNERBRAWL_PATH/install.sh
+if [ $1 == "join" ]
+    then cd $BANNERBRAWL_PATH && ./join.sh $2
+fi
+
+if [ $1 == "leave" ]
+    then cd $BANNERBRAWL_PATH && ./leave.sh
+fi
+
+if [ $1 == "uninstall" ]
+    then cd $BANNERBRAWL_PATH && ./install.sh
 fi

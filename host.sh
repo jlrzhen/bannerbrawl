@@ -1,4 +1,4 @@
-source scripts/spinners.sh
+source /bannerbrawl/scripts/spinners.sh
 
 read -s -p "Enter Zerotier API key: " ZEROTIER_API_KEY; echo
 ZEROTIER_ENDPOINT="https://api.zerotier.com/api/v1"
@@ -76,9 +76,9 @@ join_params_str=$(IFS=" " ; echo "${join_params[*]}")
 join_params_base64_encoded=$(echo -n "$join_params_str" | base64)
 
 echo
-echo "Tell your opponent to run this command:"
+echo "Tell your opponent to install bannerbrawl and run this command:"
 echo
-echo "curl -s https://raw.githubusercontent.com/jlrzhen/bannerbrawl/main/join.sh | bash -s $join_params_base64_encoded"
+echo "bannerbrawl join $join_params_base64_encoded"
 echo
 read -p "Then ask your opponent to give you their response code and paste it here: " member_ids
 

@@ -31,10 +31,10 @@ build:
 	--tag $(IMAGE) . --no-cache
 start:
 	@echo "Starting container..."
-	@docker-compose --file $(DOCKER_COMPOSE_PATH) up --detach
+	docker compose --file $(DOCKER_COMPOSE_PATH) up --detach
 stop:
 	@echo "Stopping container..."
-	docker  compose --file $(DOCKER_COMPOSE_PATH) down 
+	docker compose --file $(DOCKER_COMPOSE_PATH) down 
 clean:
 	@echo "Removing image..."
 	@until $(CONTAINER_RUNTIME) rmi $(IMAGE) \

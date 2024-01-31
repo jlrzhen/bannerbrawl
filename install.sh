@@ -1,4 +1,4 @@
-if docker ps
+if docker ps > /dev/null
 then echo docker already installed.
 else
     ### Install Docker
@@ -22,12 +22,14 @@ else
     sudo usermod -aG docker $USER
     newgrp docker
 fi
+sudo apt install jq make
 
-if ls /bannerbrawl
+if ls /bannerbrawl > /dev/null
 then
-    rm -r /bannerbrawl
-    PATH=$(echo "$PATH" | sed -e 's/:\/bannerbrawl\/run//')
+    sudo rm -r /bannerbrawl
+    sed -i '/export PATH=\$PATH:\/bannerbrawl\/run/d' ~/.bashrc
 else
-    git clone https://github.com/jlrzhen/bannerbrawl.git /bannerbrawl
-    export PATH=$PATH:/bannerbrawl/run
+    sudo git clone https://github.com/jlrzhen/bannerbrawl.git /bannerbrawl
+    echo 'export PATH=$PATH:/bannerbrawl/run' >> ~/.bashrc
 fi
+echo bannerbrawl installed. Run 'bannerbrawl host' to start a new game.
