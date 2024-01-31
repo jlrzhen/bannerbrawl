@@ -28,6 +28,7 @@ if ls /bannerbrawl > /dev/null
 then
     sudo rm -r /bannerbrawl
     sed -i '/export PATH=\$PATH:\/bannerbrawl\/run/d' ~/.bashrc
+    cd /bannerbrawl && make build_stage_1
 else
     sudo git clone https://github.com/jlrzhen/bannerbrawl.git /bannerbrawl
     echo 'export PATH=$PATH:/bannerbrawl/run' >> ~/.bashrc
