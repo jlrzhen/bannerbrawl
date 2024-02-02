@@ -33,9 +33,8 @@ else
 cd /bannerbrawl && make build_stage_1
 EOF
 )
-        source <(newgrp docker)
     fi
-    echo 'export PATH=$PATH:/bannerbrawl/run' >> ~/.bashrc
-    source .bashrc
+    echo '[[ ":$PATH:" == *:/bannerbrawl/run:* ]] || PATH="$PATH:/bannerbrawl/run"' >> ~/.bashrc
+    echo bannerbrawl installed. Run 'bannerbrawl host' to start a new game.
+    newgrp docker
 fi
-echo bannerbrawl installed. Run 'bannerbrawl host' to start a new game.
