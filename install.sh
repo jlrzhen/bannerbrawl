@@ -38,3 +38,5 @@ EOF
     echo bannerbrawl installed. Run 'bannerbrawl host' to start a new game.
     newgrp docker
 fi
+echo
+echo bannerbrawl installed. Run 'bannerbrawl host' to start a new game.

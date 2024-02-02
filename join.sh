@@ -1,4 +1,4 @@
-source /bannerbrawl/scripts/spinners.sh
+source $BANNERBRAWL_PATH/scripts/spinners.sh
 
 # Decode the Base64-encoded string
 base64_decoded=$(echo "$1" | base64 -d)

@@ -1,4 +1,4 @@
-source /bannerbrawl/scripts/spinners.sh
+source $BANNERBRAWL_PATH/scripts/spinners.sh
 
 read -s -p "Enter Zerotier API key: " ZEROTIER_API_KEY; echo
 ZEROTIER_ENDPOINT="https://api.zerotier.com/api/v1"
