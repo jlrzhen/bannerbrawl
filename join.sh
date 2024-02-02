@@ -10,12 +10,13 @@ echo "join params: ${join_params[@]}"
 # create the game network
 make build ZEROTIER_NETWORK_ID="${join_params[0]}" GAMEKEEPER_IP="${join_params[1]}"
 
-make start SERVICE_NAME=gamekeeper
 make start SERVICE_NAME=kingtower
+#make start SERVICE_NAME=archertower1
+#make start SERVICE_NAME=archertower2
 echo
 
 # get member ids from flask
-PORTS=("5000" "5001")
+PORTS=("5000")
 MEMBER_IDS=()
 for port in "${PORTS[@]}"
 do
