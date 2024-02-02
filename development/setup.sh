@@ -4,10 +4,10 @@ select option in Setup Reset Exit
 do
     case $option in
         "Setup")
-            export PATH=$PATH:/workspace/bannerbrawl/run
+            export PATH=$PATH:/workspaces/bannerbrawl/run
             break;;
         "Reset")
-            export PATH=$(echo "$PATH" | sed -e 's/:\/workspace\/bannerbrawl\/run//')
+            export PATH=$(echo "$PATH" | sed -e 's/:\/workspaces\/bannerbrawl\/run//')
             break;;
         "Exit")
             echo "exit"
