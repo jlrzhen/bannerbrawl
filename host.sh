@@ -26,6 +26,8 @@ curl $ZEROTIER_ENDPOINT/network/$ZEROTIER_NETWORK_ID \
 # build the base image
 make build \
 ZEROTIER_API_KEY=$ZEROTIER_API_KEY
+make build_gamekeeper \
+ZEROTIER_API_KEY=$ZEROTIER_API_KEY
 
 # start containers
 make start SERVICE_NAME=gamekeeper && \
