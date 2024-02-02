@@ -1,10 +1,13 @@
 """Get zerotier member id and serve over flask."""
 
 import subprocess
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 
 # gunicorn --bind 0.0.0.0:5000 ./kingtower:app --daemon
 app = Flask(__name__)
+
+flags = []
+message_str = "none"
 
 @app.route("/")
 def hello_world():
@@ -34,7 +37,24 @@ def hello_world():
 @app.route("/dashboard")
 def dashboard():
     """show dashboard"""
-    return "dashboard"
+    return render_template('dashboard.html', message=message_str)
+
+@app.route("/setflag/<flag>")
+def setflag(flag):
+    flags.append(flag)
+    return render_template('dashboard.html', message=message_str)
+
+@app.route("/submit/<flag>")
+def submit_flag(flag):
+    for f in flags:
+        if f == flag:
+            message_str = f"winner submitted flag: {f}"
+            return render_template('dashboard.html', message=message_str)
+    return render_template('dashboard.html', message=message_str)
+
+@app.route("/debug")
+def debug():
+    return f"flags: {flags}"
 
 if __name__ == "__main__":
     app.run()
