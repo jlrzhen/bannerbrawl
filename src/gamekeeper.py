@@ -1,13 +1,14 @@
 """Get zerotier member id and serve over flask."""
 
 import subprocess
-from flask import Flask, jsonify, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, url_for, Response
 
 # gunicorn --bind 0.0.0.0:5000 ./kingtower:app --daemon
 app = Flask(__name__)
 
 players = []
 flags = []
+winner = None
 message_str = "none"
 
 @app.route("/")
@@ -37,7 +38,7 @@ def hello_world():
 
 @app.route("/debug")
 def debug():
-    return f"players: {players} flags: {flags}"
+    return f"players: {players} flags: {flags} winner: {winner}"
 
 @app.route("/username/<username>")
 def submit_username(username):
@@ -57,15 +58,20 @@ def dashboard():
 @app.route("/setflag/<flag>")
 def setflag(flag):
     flags.append(flag)
-    return render_template('dashboard.html', message=message_str)
+    return redirect(url_for('dashboard'))
+
+#todo: redirect all players to winner page and have all confirm new game (like ready button)
+#Response.delete_cookie('username')
+
 
 @app.route("/submit/<flag>")
 def submit_flag(flag):
+    global message_str, winner
     for f in flags:
         if f == flag:
-            message_str = f"winner submitted flag: {f}"
-            return render_template('dashboard.html', message=message_str)
-    return render_template('dashboard.html', message=message_str)
+            winner = request.cookies.get('username')
+            message_str = f"winner! {winner} submitted flag: {f}"
+    return redirect(url_for('dashboard')) #todo: redirect to winner page
 
 if __name__ == "__main__":
     app.run()
