@@ -1,15 +1,17 @@
 """Get zerotier member id and serve over flask."""
 
 import subprocess
-from flask import Flask, jsonify, render_template, request, redirect, url_for, Response
+import random
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 
-# gunicorn --bind 0.0.0.0:5000 ./kingtower:app --daemon
+# gunicorn --bind 0.0.0.0:5000 gamekeeper:app --daemon
 app = Flask(__name__)
 
 players = []
 flags = []
 winner = None
 message_str = "none"
+room_id = None
 
 @app.route("/")
 def hello_world():
@@ -42,9 +44,16 @@ def debug():
 
 @app.route("/username/<username>")
 def submit_username(username):
-    """submit username"""
-    players.append(username)
-    return redirect(url_for('dashboard'))
+    """new player registers their username"""
+    global room_id
+    if room_id is None:
+        room_id = random.randint(0,999)
+    if username not in players:
+        players.append(username)
+    res = redirect(url_for('dashboard'))   
+    res.set_cookie('room_id', str(room_id))  
+    res.set_cookie('username', username)
+    return res
 
 @app.route("/dashboard")
 def dashboard():
@@ -57,21 +66,31 @@ def dashboard():
 
 @app.route("/setflag/<flag>")
 def setflag(flag):
+    """set flag"""
     flags.append(flag)
     return redirect(url_for('dashboard'))
 
 #todo: redirect all players to winner page and have all confirm new game (like ready button)
-#Response.delete_cookie('username')
-
 
 @app.route("/submit/<flag>")
 def submit_flag(flag):
+    """submit flag"""
     global message_str, winner
-    for f in flags:
-        if f == flag:
-            winner = request.cookies.get('username')
-            message_str = f"winner! {winner} submitted flag: {f}"
+    if winner is not None and flag in flags:
+        winner = request.cookies.get('username')
+        message_str = f"winner! {winner} submitted flag: {flag}"
     return redirect(url_for('dashboard')) #todo: redirect to winner page
+
+@app.route("/quit")
+def quit():
+    """quit game"""
+    username = request.cookies.get('username')
+    if username in players:
+        players.remove(username)
+    res = redirect(url_for('dashboard'))  
+    res.delete_cookie('username')
+    res.delete_cookie('room_id')
+    return res
 
 if __name__ == "__main__":
     app.run()
