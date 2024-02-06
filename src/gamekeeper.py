@@ -10,8 +10,14 @@ app = Flask(__name__)
 players = []
 flags = []
 winner = None
-message_str = "none"
+messages_str = [""] * 10
 room_id = None
+reset_pending = True
+
+def log_msg(msg):
+    global messages_str
+    messages_str.append(f"[LOG] {msg}")
+    messages_str.pop(0)
 
 @app.route("/")
 def hello_world():
@@ -40,7 +46,7 @@ def hello_world():
 
 @app.route("/debug")
 def debug():
-    return f"players: {players} flags: {flags} winner: {winner}"
+    return f"players: {players} flags: {flags} winner: {winner} messages_str: {messages_str}"
 
 @app.route("/username/<username>")
 def submit_username(username):
@@ -53,21 +59,27 @@ def submit_username(username):
     res = redirect(url_for('dashboard'))   
     res.set_cookie('room_id', str(room_id))  
     res.set_cookie('username', username)
+    log_msg(f"{username} has joined the room.")
+    global reset_pending
+    if reset_pending is True:
+        reset_pending = False
     return res
 
 @app.route("/dashboard")
 def dashboard():
     """show dashboard"""
-    if request.cookies.get('username') is None:
+    username = request.cookies.get('username') 
+    if username is None or username not in players:
         return render_template('joinpage.html')
     return render_template(
-        'dashboard.html', message=message_str, username=request.cookies.get('username')
+        'dashboard.html', messages_str=messages_str, username=request.cookies.get('username')
     )
 
 @app.route("/setflag/<flag>")
 def setflag(flag):
     """set flag"""
-    flags.append(flag)
+    username = request.cookies.get('username') 
+    flags.append({username: flag})
     return redirect(url_for('dashboard'))
 
 #todo: redirect all players to winner page and have all confirm new game (like ready button)
@@ -75,10 +87,14 @@ def setflag(flag):
 @app.route("/submit/<flag>")
 def submit_flag(flag):
     """submit flag"""
-    global message_str, winner
-    if winner is not None and flag in flags:
-        winner = request.cookies.get('username')
-        message_str = f"winner! {winner} submitted flag: {flag}"
+    global winner
+    username = request.cookies.get('username')
+    if winner is None:
+        if any(flag in d.values() for d in flags if username not in d.keys()):
+            winner = request.cookies.get('username')
+            log_msg(f"WINNER! {winner} submitted flag: {flag}")
+        else:
+            log_msg(f"INCORRECT FLAG submitted by {username}: {flag}")
     return redirect(url_for('dashboard')) #todo: redirect to winner page
 
 @app.route("/quit")
@@ -90,7 +106,28 @@ def quit():
     res = redirect(url_for('dashboard'))  
     res.delete_cookie('username')
     res.delete_cookie('room_id')
+    global reset_pending
+    if reset_pending is False:
+        log_msg(f"{username} has left the room.")
+    else:
+        reset_pending = False
     return res
+
+@app.route("/reset")
+def reset_game():
+    global players
+    players = []
+    global flags
+    flags = []
+    global winner
+    winner = None
+    global messages_str
+    messages_str = [""] * 10
+    global room_id
+    room_id = None
+    global reset_pending
+    reset_pending = True
+    return redirect(url_for('quit'))
 
 if __name__ == "__main__":
     app.run()

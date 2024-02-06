@@ -4,8 +4,10 @@
 -->
 <main class="w-full h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
     <div class="w-full max-w-md px-8 py-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <h2 class="text-2xl font-semibold text-center text-gray-700 dark:text-white">Welcome!</h2>
-        <p class="mt-3 text-center text-gray-600 dark:text-gray-400">Please enter your username to continue.</p>
+        <div class="text-center">
+            <code class="text-4xl font-semibold text-center text-green-500 bg-black px-1 rounded-md">bannerbrawl</code>
+        </div>
+        <p class="mt-3 text-center text-gray-600 dark:text-gray-400">Please enter a username to continue.</p>
         <form id="submission" onSubmit="submitUsername()" class="mt-7">
             <div class="flex flex-col mb-6"><label
                     class="font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-1 text-xs sm:text-sm tracking-wide text-gray-600 dark:text-gray-400"
@@ -16,17 +18,22 @@
                     id="username" placeholder="Enter your username" type="text"></div><button
                 class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 w-full py-2 px-4 leading-5 text-white transition-colors duration-200 transform bg-indigo-700 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
                 type="submit">
-                <script> 
-                    function submitUsername() {
-                      let username = document.getElementById("username").value;
-                      let url = `/username/${username}`;  
-                      document.cookie = `username=${username}`;  
-                      document.getElementById("submission").setAttribute("action", url);
-                    }
-                </script>
-                Submit
+                Login
             </button>
         </form>
+        <script> 
+            function submitUsername() {
+                let username = document.getElementById("username").value;
+                let url = `/dashboard`
+                if(username == "") {
+                    alert("Please enter a username.")
+                } else {
+                    let url = `/username/${username}`;   
+                    document.cookie = `username=${username}`;  
+                    document.getElementById("submission").setAttribute("action", url);
+                }
+            }
+        </script>
     </div>
 </main>
 <script src="https://cdn-tailwindcss.vercel.app/"></script>
