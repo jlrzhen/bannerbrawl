@@ -59,16 +59,7 @@
                 </script>
             </div>
         </div>
-        <div class="flex flex-wrap gap-2"><button onclick="location.href = '/quit';"
-            class="
-                inline-flex items-center justify-center whitespace-nowrap rounded-md
-                text-sm font-medium ring-offset-background transition-colors 
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
-                border border-input
-                text-white hover:bg-accent hover:text-accent-foreground 
-                bg-indigo-700 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600 
-                h-10 px-4 py-2">
-            Quit</button><button
+        <div class="flex flex-wrap gap-2"><button
             onclick="location.href = '/reset';"
             class="
                 inline-flex items-center justify-center whitespace-nowrap rounded-md
@@ -78,7 +69,16 @@
                 text-white hover:bg-accent hover:text-accent-foreground
                 bg-indigo-700 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600 
                 h-10 px-4 py-2">
-            Reset Game</button><button onclick="location.href = `/setflag/${[...Array(10)].map(() => Math.random().toString(36)[2]).join('')}`;"
+            Reset Game</button><button onclick="location.href = '/quit';"
+            class="
+                inline-flex items-center justify-center whitespace-nowrap rounded-md
+                text-sm font-medium ring-offset-background transition-colors 
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
+                border border-input
+                text-white hover:bg-accent hover:text-accent-foreground 
+                bg-indigo-700 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600 
+                h-10 px-4 py-2">
+            Quit</button><button onclick="location.href = `/setflag/${[...Array(10)].map(() => Math.random().toString(36)[2]).join('')}`;"
                 class="
                 inline-flex items-center justify-center whitespace-nowrap rounded-md
                 text-sm font-medium ring-offset-background transition-colors 
