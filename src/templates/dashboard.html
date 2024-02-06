@@ -12,11 +12,11 @@
             <div class="flex flex-col space-y-1.5 p-6 bg-white shadow-md dark:bg-gray-800">
                 <h3 class="dark:text-white text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">Log Viewer</h3>
             </div>
-            <div class="p-6 h-[200px] overflow-auto bg-gray-100 dark:bg-gray-700">
+            <div id="scrollContainer" class="p-6 h-[200px] overflow-auto bg-gray-100 dark:bg-gray-700">
                 <div class="text-xs text-gray-500 dark:text-gray-400">
-                    [INFO] Currently logged in as {{ username }}</br>
+                    [INFO] Currently logged in as <span class="text-yellow-100">{{ username }}</span></br>
                     {% for item in messages_str if item.strip() != "" %}
-                        {% if not loop.first %}</br>{% endif %}{{ item }}
+                        {% if not loop.first %}</br>{% endif %}{{ item|safe }}
                     {% endfor %}
                 </div>
             </div>
@@ -46,6 +46,10 @@
                     type="submit">Submit</button>
                 </form>
                 <script> 
+                    var scrollContainer = document.getElementById('scrollContainer');
+                    // Scroll to the bottom
+                    scrollContainer.scrollTop = scrollContainer.scrollHeight;
+
                     function submitFlag() {
                       let flag = document.getElementById("flag").value;
                       if(flag == "") flag = "null"
@@ -64,8 +68,18 @@
                 text-white hover:bg-accent hover:text-accent-foreground 
                 bg-indigo-700 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600 
                 h-10 px-4 py-2">
-            Quit</button><button onclick="location.href = `/setflag/${[...Array(10)].map(() => Math.random().toString(36)[2]).join('')}`;"
+            Quit</button><button
+            onclick="location.href = '/reset';"
             class="
+                inline-flex items-center justify-center whitespace-nowrap rounded-md
+                text-sm font-medium ring-offset-background transition-colors 
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
+                border border-input
+                text-white hover:bg-accent hover:text-accent-foreground
+                bg-indigo-700 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600 
+                h-10 px-4 py-2">
+            Reset Game</button><button onclick="location.href = `/setflag/${[...Array(10)].map(() => Math.random().toString(36)[2]).join('')}`;"
+                class="
                 inline-flex items-center justify-center whitespace-nowrap rounded-md
                 text-sm font-medium ring-offset-background transition-colors 
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
@@ -74,16 +88,7 @@
                 bg-indigo-700 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600 
                 h-10 px-4 py-2">
             Generate Flag</button><button
-            class="
-                inline-flex items-center justify-center whitespace-nowrap rounded-md
-                text-sm font-medium ring-offset-background transition-colors 
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
-                border-input
-                text-white hover:bg-accent hover:text-accent-foreground
-                bg-indigo-700 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600 
-                h-10 px-4 py-2">
-            Action 3</button><button
-            class="
+                class="
                 inline-flex items-center justify-center whitespace-nowrap rounded-md
                 text-sm font-medium ring-offset-background transition-colors 
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50

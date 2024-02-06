@@ -8,16 +8,35 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for
 app = Flask(__name__)
 
 players = []
+player_colors = ["violet-400", "cyan-400", "teal-400", "fuchsia-400"]
+player_color_mapping = {}
 flags = []
 winner = None
 messages_str = [""] * 10
 room_id = None
 reset_pending = True
 
+def get_player_color(username):
+    if username not in player_color_mapping:
+        # If the username is not already mapped to a color, assign the next available color
+        player_color_mapping[username] = player_colors[len(player_color_mapping) % len(player_colors)]
+    return color_string(username, player_color_mapping[username])
+
 def log_msg(msg):
     global messages_str
-    messages_str.append(f"[LOG] {msg}")
-    messages_str.pop(0)
+    messages_str.insert(0, f"[LOG] {msg}")
+    messages_str.pop(-1)
+
+def color_string(htmlstring, color):
+    escapes = {'\"': '&quot;',
+               '\'': '&#39;',
+               '<': '&lt;',
+               '>': '&gt;'}
+    # This is done first to prevent escaping other escapes.
+    htmlstring = htmlstring.replace('&', '&amp;')
+    for seq, esc in escapes.items():
+        htmlstring = htmlstring.replace(seq, esc)
+    return f"<span class=\"text-{color}\">{htmlstring}</span>"
 
 @app.route("/")
 def hello_world():
@@ -59,7 +78,7 @@ def submit_username(username):
     res = redirect(url_for('dashboard'))   
     res.set_cookie('room_id', str(room_id))  
     res.set_cookie('username', username)
-    log_msg(f"{username} has joined the room.")
+    log_msg(f"{get_player_color(username)} has joined the room.")
     global reset_pending
     if reset_pending is True:
         reset_pending = False
@@ -84,8 +103,8 @@ def setflag(flag):
     username = request.cookies.get('username') 
     user_keys = [d.get(username) for d in flags if username in d.keys()]
     if flag not in user_keys:
-        flags.append({username: flag})
-        log_msg(f"{username} submitted a flag!")
+        flags.insert(0, {username: flag})
+        log_msg(f"{get_player_color(username)} generated a flag!")
     return redirect(url_for('dashboard'))
 
 #todo: redirect all players to winner page and have all confirm new game (like ready button)
@@ -98,9 +117,11 @@ def submit_flag(flag):
     if winner is None:
         if any(flag in d.values() for d in flags if username not in d.keys()):
             winner = request.cookies.get('username')
-            log_msg(f"WINNER! {winner} submitted flag: {flag}")
+            log_msg(f"{color_string('WINNER!', 'green-400')} {winner} submitted flag: {flag}")
         else:
-            log_msg(f"INCORRECT FLAG submitted by {username}: {flag}")
+            log_msg(
+                f"{color_string('INCORRECT FLAG', 'red-500')} submitted by {get_player_color(username)}: {flag}"
+            )
     return redirect(url_for('dashboard')) #todo: redirect to winner page
 
 @app.route("/quit")
@@ -114,7 +135,7 @@ def quit():
     res.delete_cookie('room_id')
     global reset_pending
     if reset_pending is False:
-        log_msg(f"{username} has left the room.")
+        log_msg(f"{get_player_color(username)} has left the room.")
     else:
         reset_pending = False
     return res
