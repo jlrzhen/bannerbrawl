@@ -2,6 +2,18 @@
 // v0 by Vercel.
 // https://v0.dev/t/KWFjaNL1hf0
 -->
+<head>
+    <script>
+        // https://stackoverflow.com/questions/63033412/dark-mode-flickers-a-white-background-for-a-millisecond-on-reload
+        // IMPORTANT: set this in <HEAD> top before any other tag.
+        const setTheme = (theme) => {
+            theme ??= localStorage.theme || "light";
+            document.documentElement.dataset.theme = theme;
+            localStorage.theme = theme;
+        };
+        setTheme();
+    </script>
+</head>
 <div class="flex flex-col h-screen">
     <header class="flex items-center h-16 px-4 bg-white shadow-md dark:bg-gray-800">
     <code class="text-lg text-green-500 bg-black px-1 rounded-md">bannerbrawl</code><h1 class="text-lg font-semibold dark:text-white">&nbsp;&nbsp;Dashboard</h1>
@@ -12,7 +24,7 @@
             <div class="flex flex-col space-y-1.5 p-6 bg-white shadow-md dark:bg-gray-800">
                 <h3 class="dark:text-white text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">Log Viewer</h3>
             </div>
-            <div id="scrollContainer" class="p-6 h-[200px] overflow-auto bg-gray-100 dark:bg-gray-700">
+            <div class="p-6 h-[200px] overflow-auto bg-gray-100 dark:bg-gray-700">
                 <div class="text-xs text-gray-500 dark:text-gray-400">
                     [INFO] Currently logged in as <span class="text-yellow-100">{{ username }}</span></br>
                     {% for item in messages_str if item.strip() != "" %}
@@ -43,16 +55,15 @@
                     class="flex h-10 border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full px-4 py-2 rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500 border dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700"
                     placeholder="Enter flag" type="text"><button
                     class="inline-flex items-center justify-center whitespace-nowrap rounded-md
-                    text-sm font-medium ring-offset-background transition-colors
+                    text-sm font-medium ring-offset-background transition-colors 
                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
-                    text-white transition-colors transform bg-indigo-700 rounded-md hover:bg-accent h-10 px-4 py-2 focus:outline-none focus:bg-indigo-600 "
+                    border-input
+                    text-white hover:bg-accent hover:text-accent-foreground 
+                    bg-indigo-700 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600 
+                    h-10 px-4 py-2"
                     type="submit">Submit</button>
                 </form>
                 <script> 
-                    var scrollContainer = document.getElementById('scrollContainer');
-                    // Scroll to the bottom
-                    scrollContainer.scrollTop = scrollContainer.scrollHeight;
-
                     function submitFlag() {
                       let flag = document.getElementById("flag").value;
                       if(flag == "") flag = "null"
