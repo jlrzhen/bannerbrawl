@@ -72,14 +72,20 @@ def dashboard():
     if username is None or username not in players:
         return render_template('joinpage.html')
     return render_template(
-        'dashboard.html', messages_str=messages_str, username=request.cookies.get('username')
+        'dashboard.html', 
+        username=request.cookies.get('username'),
+        messages_str=messages_str, 
+        flags_str=[d.get(username) for d in flags if username in d.keys()]
     )
 
 @app.route("/setflag/<flag>")
 def setflag(flag):
     """set flag"""
     username = request.cookies.get('username') 
-    flags.append({username: flag})
+    user_keys = [d.get(username) for d in flags if username in d.keys()]
+    if flag not in user_keys:
+        flags.append({username: flag})
+        log_msg(f"{username} submitted a flag!")
     return redirect(url_for('dashboard'))
 
 #todo: redirect all players to winner page and have all confirm new game (like ready button)
