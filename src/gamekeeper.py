@@ -104,7 +104,7 @@ def setflag(flag):
     user_keys = [d.get(username) for d in flags if username in d.keys()]
     if flag not in user_keys:
         flags.insert(0, {username: flag})
-        log_msg(f"{get_player_color(username)} generated a flag!")
+        log_msg(f"{get_player_color(username)} generated a flag! Total flag count: {len(user_keys)+1}")
     return redirect(url_for('dashboard'))
 
 #todo: redirect all players to winner page and have all confirm new game (like ready button)
