@@ -121,5 +121,5 @@ do network_member=''
     echo "Approved member id: $member_id"
 done
 
-echo "Login to kingtower by running: ssh root@localhost"
+echo "Login to kingtower by running: ssh -L localhost:80:$gamekeeper_ip:5000 root@localhost"
 echo

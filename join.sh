@@ -6,9 +6,10 @@ base64_decoded=$(echo "$1" | base64 -d)
 # Split the string into an array using space as the delimiter
 IFS=" " read -ra join_params <<< "$base64_decoded"
 echo "join params: ${join_params[@]}"
+GAMEKEEPER_IP=$(echo ${join_params[1]} | sed -e 's/\/*//g')
 
 # create the game network
-make build ZEROTIER_NETWORK_ID="${join_params[0]}" GAMEKEEPER_IP="${join_params[1]}"
+make build ZEROTIER_NETWORK_ID="${join_params[0]}" GAMEKEEPER_IP="$GAMEKEEPER_IP"
 
 make start SERVICE_NAME=kingtower
 #make start SERVICE_NAME=archertower1
@@ -16,7 +17,7 @@ make start SERVICE_NAME=kingtower
 echo
 
 # get member ids from flask
-PORTS=("5000")
+PORTS=("5001")
 MEMBER_IDS=()
 for port in "${PORTS[@]}"
 do
@@ -38,7 +39,8 @@ do
 done
 
 echo "Member ids: ${MEMBER_IDS[@]}"
-echo "Login to kingtower by running: ssh root@localhost"
+echo "Login to kingtower by running: ssh -L localhost:80:$GAMEKEEPER_IP:5000 root@localhost"
+echo "Dashboard: https://localhost:80/dashboard"
 echo
 
 # Join the array into a space-separated string
