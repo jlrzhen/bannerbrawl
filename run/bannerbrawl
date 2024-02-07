@@ -1,4 +1,4 @@
-BANNERBRAWL_PATH="/workspaces/bannerbrawl"
+BANNERBRAWL_PATH="/bannerbrawl"
 
 if [ $1 == "host" ]
     then cd $BANNERBRAWL_PATH && . ./host.sh 

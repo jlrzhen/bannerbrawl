@@ -5,9 +5,12 @@ do
     case $option in
         "Setup")
             export PATH=$PATH:/workspaces/bannerbrawl/run
+            mkdir /bannerbrawl
+            ln -s /workspaces/bannerbrawl /bannerbrawl
             break;;
         "Reset")
             export PATH=$(echo "$PATH" | sed -e 's/:\/workspaces\/bannerbrawl\/run//')
+            rm /bannerbrawl
             break;;
         "Exit")
             echo "exit"
