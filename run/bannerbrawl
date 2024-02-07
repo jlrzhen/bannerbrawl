@@ -21,6 +21,6 @@ if [ $1 == "uninstall" ]
 fi
 
 if [ $1 == "update" ]
-    then cd $BANNERBRAWL_PATH && . ./install.sh
+    then bannerbrawl uninstall
     source <(curl -sSL "https://raw.githubusercontent.com/jlrzhen/bannerbrawl/main/install.sh")
 fi
