@@ -2,6 +2,8 @@ if ls /bannerbrawl > /dev/null
 then
     sudo rm -r /bannerbrawl
     sed -i '/export PATH=\$PATH:\/bannerbrawl\/run/d' ~/.bashrc
+    echo
+    echo bannerbrawl uninstalled.
 else
     sudo apt install -y jq make git
     sudo git clone https://github.com/jlrzhen/bannerbrawl.git /bannerbrawl
@@ -38,5 +40,4 @@ EOF
     echo bannerbrawl installed. Run 'bannerbrawl host' to start a new game.
     newgrp docker
 fi
-echo
-echo bannerbrawl installed. Run 'bannerbrawl host' to start a new game.
+
