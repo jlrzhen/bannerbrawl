@@ -39,8 +39,8 @@ do
 done
 
 echo "Member ids: ${MEMBER_IDS[@]}"
-echo "Login to kingtower by running: ssh -L localhost:80:$GAMEKEEPER_IP:5000 root@localhost"
-echo "Dashboard: https://localhost:80/dashboard"
+echo "Login to kingtower by running: ssh -L localhost:8080:$GAMEKEEPER_IP:5000 root@localhost"
+echo "Dashboard: http://localhost:8080/dashboard"
 echo
 
 # Join the array into a space-separated string

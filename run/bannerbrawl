@@ -19,3 +19,6 @@ fi
 if [ $1 == "uninstall" ]
     then cd $BANNERBRAWL_PATH && . ./install.sh
 fi
+
+if [ $1 == "dashboard" ]
+    then echo "http://$(cat /root/zerotier.txt | sed -e 's/.*gamekeeper ip: //g')/dashboard"
