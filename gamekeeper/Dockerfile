@@ -16,6 +16,10 @@ RUN echo \
 COPY src /srv/bannerbrawl
 EXPOSE 5000
 
+# Copy dashboard script
+COPY scripts/box/bannerbrawl /bin/bannerbrawl
+RUN chmod +x /bin/bannerbrawl
+
 # Copy and run entrypoint script
 COPY scripts/entrypoint_gamekeeper.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

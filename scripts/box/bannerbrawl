@@ -1,0 +1,3 @@
+if [ $1 == "dashboard" ]
+    then echo "http://$(cat /root/zerotier.txt | sed -e 's/.*gamekeeper ip: //g')/dashboard"
+fi
