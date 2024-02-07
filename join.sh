@@ -39,7 +39,7 @@ do
 done
 
 echo "Member ids: ${MEMBER_IDS[@]}"
-echo "Login to kingtower by running: ssh -L localhost:8080:$GAMEKEEPER_IP:5000 root@localhost"
+echo "Login to kingtower by running: ssh -L localhost:8080:$GAMEKEEPER_IP:5000 root@localhost -p 30023"
 echo "Dashboard: http://localhost:8080/dashboard"
 echo
 
