@@ -4,6 +4,7 @@ then
     sed -i '/export PATH=\$PATH:\/bannerbrawl\/run/d' ~/.bashrc
     echo
     echo bannerbrawl uninstalled.
+    echo
 else
     sudo apt install -y jq make git
     sudo git clone https://github.com/jlrzhen/bannerbrawl.git /bannerbrawl
@@ -37,7 +38,9 @@ EOF
 )
     fi
     echo '[[ ":$PATH:" == *:/bannerbrawl/run:* ]] || PATH="$PATH:/bannerbrawl/run"' >> ~/.bashrc
+    echo
     echo bannerbrawl installed. Run 'bannerbrawl host' to start a new game.
+    echo
     newgrp docker
 fi
 
