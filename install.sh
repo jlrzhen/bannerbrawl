@@ -11,7 +11,9 @@ else
     
     # Install Docker
     if docker ps > /dev/null
-    then echo docker already installed.
+    then 
+        echo docker already installed.
+        cd /bannerbrawl && make build_stage_1
     else
         # remove conflicting packages
         for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
